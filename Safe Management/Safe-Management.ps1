@@ -1025,7 +1025,7 @@ If (Test-CommandExists Invoke-RestMethod)
 				Write-LogMessage -Type Error -Msg "Error deleting safe '$SafeName'. Error: $(Collect-ExceptionMessage $_.Exception)"
 			}
 		}
-		"Members"
+		{($_ -eq "Members") -or ($_ -eq "UpdateMembers")} 
 		{
 			try{
 				if([string]::IsNullOrEmpty($UserName))
@@ -1069,7 +1069,7 @@ If (Test-CommandExists Invoke-RestMethod)
 							$permRequestsAuthorizationLevel = 1
 						}
 					}
-					Set-SafeMember -safename $SafeName -safeMember $UserName -memberSearchInLocation $UserLocation `
+					Set-SafeMember -safename $SafeName -safeMember $UserName -updateMember $UpdateMembers -memberSearchInLocation $UserLocation `
 								-permUseAccounts $permUseAccounts -permRetrieveAccounts $permRetrieveAccounts -permListAccounts $permListAccounts `
 								-permAddAccounts $permAddAccounts -permUpdateAccountContent $permUpdateAccountContent -permUpdateAccountProperties $permUpdateAccountProperties `
 								-permInitiateCPMManagement $permInitiateCPMManagement -permSpecifyNextAccountContent $permSpecifyNextAccountContent `
