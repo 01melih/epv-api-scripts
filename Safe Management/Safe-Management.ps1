@@ -74,12 +74,14 @@ param
 	
 	# Member Roles 
 	[Parameter(ParameterSetName='Members',Mandatory=$false,HelpMessage="Enter a role for the member to add (Default: EndUser)")]
+	[Parameter(ParameterSetName='UpdateMembers',Mandatory=$false,HelpMessage="Enter a role for the member to update (Default: EndUser)")]
 	[ValidateSet("Admin", "Auditor", "EndUser", "Owner")]
 	[Alias("Role")]
 	[String]$MemberRole = "EndUser",
 	
 	# User / Member name 
 	[Parameter(ParameterSetName='Members',Mandatory=$false,HelpMessage="Enter the user name to add as member to the safe")]
+	[Parameter(ParameterSetName='UpdateMembers',Mandatory=$false,HelpMessage="Enter the user name to update permissions on the safe")]
 	[ValidateScript({$_.Length -le 128})]
 	[Alias("User")]
 	[String]$UserName,
