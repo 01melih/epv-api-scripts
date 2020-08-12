@@ -1,0 +1,4 @@
+
+*.log
+*.csv
+Platforms/Get-PlatformReprot.ps1
