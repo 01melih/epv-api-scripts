@@ -131,7 +131,7 @@ $URL_Logoff = $URL_CyberArkAuthentication+"/Logoff"
 # URL Methods
 # -----------
 $URL_Safes = $URL_PVWABaseAPI+"/Safes"
-$URL_SpecificSafe = $URL_PVWABaseAPI+"/Safes/{0}"
+$URL_SpecificSafe = $URL_Safes+"/{0}"
 $URL_SafeMembers = $URL_SpecificSafe+"/Members"
 
 #region Functions
@@ -774,7 +774,7 @@ $SafeMembersBody = @{
 		$restMethod = "POST"
 		If($updateMember)
 		{
-			$urlSafeMembers = ("$URL_SafeMembers\$safeMember" -f $(Encode-URL $safeName))
+			$urlSafeMembers += "/$safeMember"
 			$restMethod = "PUT"
 		}
         $setSafeMembers = Invoke-RestMethod -Uri $urlSafeMembers -Body ($safeMembersBody | ConvertTo-Json -Depth 5) -Method $restMethod -Headers $g_LogonHeader -ContentType "application/json" -TimeoutSec 3600000 -ErrorVariable rMethodErr
@@ -953,7 +953,7 @@ If (Test-CommandExists Invoke-RestMethod)
 							}
 						}
 						# Add permissions to the safe
-						Set-SafeMember -safename $line.safename -safeMember $line.member -updateMember $UpdateMembers -memberSearchInLocation $line.MemberLocation `
+						Set-SafeMember -safename ($line.safename) -safeMember $line.member -updateMember $UpdateMembers -memberSearchInLocation $line.MemberLocation `
 							-permUseAccounts $(Convert-ToBool $line.UseAccounts) -permRetrieveAccounts $(Convert-ToBool $line.RetrieveAccounts) -permListAccounts $(Convert-ToBool $line.ListAccounts) `
 							-permAddAccounts $(Convert-ToBool $line.AddAccounts) -permUpdateAccountContent $(Convert-ToBool $line.UpdateAccountContent) -permUpdateAccountProperties $(Convert-ToBool $line.UpdateAccountProperties) `
 							-permInitiateCPMManagement $(Convert-ToBool $line.InitiateCPMAccountManagementOperations) -permSpecifyNextAccountContent $(Convert-ToBool $line.SpecifyNextAccountContent) `
@@ -1030,7 +1030,7 @@ If (Test-CommandExists Invoke-RestMethod)
 		{($_ -eq "Members") -or ($_ -eq "UpdateMembers")} 
 		{
 			try{
-				if([string]::IsNullOrEmpty($UserName))
+				if([string]::IsNullOrEmpty($UserName) -and ($UpdateMembers -eq $false))
 				{
 					# List all members of a safe
 					Get-SafeMembers -SafeName $SafeName
